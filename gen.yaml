@@ -1,4 +1,9 @@
 configVersion: 1.0.0
+management:
+  docChecksum: 1fadc9376c38ce32aa18a4cb4801cc96
+  docVersion: 1.0.0
+  speakeasyVersion: 1.93.3
+  generationVersion: 2.146.1
 generation:
   comments:
     disableComments: false
@@ -7,7 +12,11 @@ generation:
   sdkClassName: Platform
   singleTagPerOp: false
   tagNamespacingDisabled: false
+features:
+  terraform:
+    core: 2.92.0
+    globalServerURLs: 2.82.0
 terraform:
-  version: 0.0.1
+  version: 0.1.0
   author: API-Dev-NS
   packageName: Platform
