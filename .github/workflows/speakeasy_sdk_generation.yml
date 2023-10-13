@@ -22,7 +22,7 @@ jobs:
         - terraform
       mode: direct
       openapi_docs: |
-        - ./openapi.yaml
+        - ./openapi.json
       speakeasy_version: latest
     secrets:
       github_access_token: ${{ secrets.GITHUB_TOKEN }}
