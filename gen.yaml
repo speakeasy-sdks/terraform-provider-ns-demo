@@ -1,9 +1,9 @@
 configVersion: 1.0.0
 management:
-  docChecksum: 1fadc9376c38ce32aa18a4cb4801cc96
+  docChecksum: 2ce558252cc48bc50ccfd24efecd3cf4
   docVersion: 1.0.0
-  speakeasyVersion: 1.96.1
-  generationVersion: 2.150.0
+  speakeasyVersion: 1.99.1
+  generationVersion: 2.154.1
 generation:
   comments:
     disableComments: false
@@ -15,8 +15,9 @@ generation:
 features:
   terraform:
     core: 2.92.1
+    globalSecurity: 2.81.1
     globalServerURLs: 2.82.0
 terraform:
-  version: 0.1.1
+  version: 0.1.2
   author: API-Dev-NS
   packageName: Platform

@@ -3,15 +3,22 @@
 package sdk
 
 import (
+	"Platform/internal/sdk/pkg/models/operations"
+	"Platform/internal/sdk/pkg/models/shared"
 	"Platform/internal/sdk/pkg/utils"
+	"bytes"
+	"context"
 	"fmt"
+	"io"
 	"net/http"
+	"strings"
 	"time"
 )
 
 // ServerList contains the list of servers available to the SDK
 var ServerList = []string{
-	"https://{{baseUrl}}",
+	// The production API server
+	"https://{tenant}.goskope.com:/{basePath}",
 }
 
 // HTTPClient provides an interface for suplying the SDK with a custom HTTP client
@@ -38,11 +45,12 @@ func Float32(f float32) *float32 { return &f }
 func Float64(f float64) *float64 { return &f }
 
 type sdkConfiguration struct {
-	DefaultClient  HTTPClient
-	SecurityClient HTTPClient
-
+	DefaultClient     HTTPClient
+	SecurityClient    HTTPClient
+	Security          *shared.Security
 	ServerURL         string
 	ServerIndex       int
+	ServerDefaults    []map[string]string
 	Language          string
 	OpenAPIDocVersion string
 	SDKVersion        string
@@ -55,14 +63,11 @@ func (c *sdkConfiguration) GetServerDetails() (string, map[string]string) {
 		return c.ServerURL, nil
 	}
 
-	return ServerList[c.ServerIndex], nil
+	return ServerList[c.ServerIndex], c.ServerDefaults[c.ServerIndex]
 }
 
-// Platform
+// Platform - npa_policy: NPA policy CRUD operations.
 type Platform struct {
-	Npa    *npa
-	Policy *policy
-
 	sdkConfiguration sdkConfiguration
 }
 
@@ -97,10 +102,43 @@ func WithServerIndex(serverIndex int) SDKOption {
 	}
 }
 
+// WithBasePath allows setting the $name variable for url substitution
+func WithBasePath(basePath string) SDKOption {
+	return func(sdk *Platform) {
+		for idx := range sdk.sdkConfiguration.ServerDefaults {
+			if _, ok := sdk.sdkConfiguration.ServerDefaults[idx]["basePath"]; !ok {
+				continue
+			}
+
+			sdk.sdkConfiguration.ServerDefaults[idx]["basePath"] = fmt.Sprintf("%v", basePath)
+		}
+	}
+}
+
+// WithTenant allows setting the $name variable for url substitution
+func WithTenant(tenant string) SDKOption {
+	return func(sdk *Platform) {
+		for idx := range sdk.sdkConfiguration.ServerDefaults {
+			if _, ok := sdk.sdkConfiguration.ServerDefaults[idx]["tenant"]; !ok {
+				continue
+			}
+
+			sdk.sdkConfiguration.ServerDefaults[idx]["tenant"] = fmt.Sprintf("%v", tenant)
+		}
+	}
+}
+
 // WithClient allows the overriding of the default HTTP client used by the SDK
 func WithClient(client HTTPClient) SDKOption {
 	return func(sdk *Platform) {
 		sdk.sdkConfiguration.DefaultClient = client
+	}
+}
+
+// WithSecurity configures the SDK to use the provided security details
+func WithSecurity(security shared.Security) SDKOption {
+	return func(sdk *Platform) {
+		sdk.sdkConfiguration.Security = &security
 	}
 }
 
@@ -110,9 +148,15 @@ func New(opts ...SDKOption) *Platform {
 		sdkConfiguration: sdkConfiguration{
 			Language:          "terraform",
 			OpenAPIDocVersion: "1.0.0",
-			SDKVersion:        "0.1.1",
-			GenVersion:        "2.150.0",
-			UserAgent:         "speakeasy-sdk/terraform 0.1.1 2.150.0 1.0.0 Platform",
+			SDKVersion:        "0.1.2",
+			GenVersion:        "2.154.1",
+			UserAgent:         "speakeasy-sdk/terraform 0.1.2 2.154.1 1.0.0 Platform",
+			ServerDefaults: []map[string]string{
+				{
+					"basePath": "api/v2",
+					"tenant":   "demo",
+				},
+			},
 		},
 	}
 	for _, opt := range opts {
@@ -124,12 +168,380 @@ func New(opts ...SDKOption) *Platform {
 		sdk.sdkConfiguration.DefaultClient = &http.Client{Timeout: 60 * time.Second}
 	}
 	if sdk.sdkConfiguration.SecurityClient == nil {
-		sdk.sdkConfiguration.SecurityClient = sdk.sdkConfiguration.DefaultClient
+		if sdk.sdkConfiguration.Security != nil {
+			sdk.sdkConfiguration.SecurityClient = utils.ConfigureSecurityClient(sdk.sdkConfiguration.DefaultClient, sdk.sdkConfiguration.Security)
+		} else {
+			sdk.sdkConfiguration.SecurityClient = sdk.sdkConfiguration.DefaultClient
+		}
 	}
 
-	sdk.Npa = newNpa(sdk.sdkConfiguration)
-
-	sdk.Policy = newPolicy(sdk.sdkConfiguration)
-
 	return sdk
+}
+
+// DeleteNpaRulesID - Delete a npa policy
+// Delete a npa policy with rule id
+func (s *Platform) DeleteNpaRulesID(ctx context.Context, request operations.DeleteNpaRulesIDRequest) (*operations.DeleteNpaRulesIDResponse, error) {
+	baseURL := utils.ReplaceParameters(s.sdkConfiguration.GetServerDetails())
+	url, err := utils.GenerateURL(ctx, baseURL, "/npa/rules/{id}", request, nil)
+	if err != nil {
+		return nil, fmt.Errorf("error generating URL: %w", err)
+	}
+
+	req, err := http.NewRequestWithContext(ctx, "DELETE", url, nil)
+	if err != nil {
+		return nil, fmt.Errorf("error creating request: %w", err)
+	}
+	req.Header.Set("Accept", "application/json")
+	req.Header.Set("user-agent", s.sdkConfiguration.UserAgent)
+
+	client := s.sdkConfiguration.SecurityClient
+
+	httpRes, err := client.Do(req)
+	if err != nil {
+		return nil, fmt.Errorf("error sending request: %w", err)
+	}
+	if httpRes == nil {
+		return nil, fmt.Errorf("error sending request: no response")
+	}
+
+	rawBody, err := io.ReadAll(httpRes.Body)
+	if err != nil {
+		return nil, fmt.Errorf("error reading response body: %w", err)
+	}
+	httpRes.Body.Close()
+	httpRes.Body = io.NopCloser(bytes.NewBuffer(rawBody))
+
+	contentType := httpRes.Header.Get("Content-Type")
+
+	res := &operations.DeleteNpaRulesIDResponse{
+		StatusCode:  httpRes.StatusCode,
+		ContentType: contentType,
+		RawResponse: httpRes,
+	}
+	switch {
+	case httpRes.StatusCode == 200:
+		switch {
+		case utils.MatchContentType(contentType, `application/json`):
+			var out *operations.DeleteNpaRulesID200ApplicationJSON
+			if err := utils.UnmarshalJsonFromResponseBody(bytes.NewBuffer(rawBody), &out); err != nil {
+				return res, err
+			}
+
+			res.DeleteNpaRulesID200ApplicationJSONObject = out
+		}
+	case httpRes.StatusCode == 400:
+		switch {
+		case utils.MatchContentType(contentType, `application/json`):
+			var out *shared.NpaPolicyResponse400
+			if err := utils.UnmarshalJsonFromResponseBody(bytes.NewBuffer(rawBody), &out); err != nil {
+				return res, err
+			}
+
+			res.NpaPolicyResponse400 = out
+		}
+	}
+
+	return res, nil
+}
+
+// GetNpaRules - Get list of npa policies
+// Get list of npa policies
+func (s *Platform) GetNpaRules(ctx context.Context, request operations.GetNpaRulesRequest) (*operations.GetNpaRulesResponse, error) {
+	baseURL := utils.ReplaceParameters(s.sdkConfiguration.GetServerDetails())
+	url := strings.TrimSuffix(baseURL, "/") + "/npa/rules"
+
+	req, err := http.NewRequestWithContext(ctx, "GET", url, nil)
+	if err != nil {
+		return nil, fmt.Errorf("error creating request: %w", err)
+	}
+	req.Header.Set("Accept", "application/json")
+	req.Header.Set("user-agent", s.sdkConfiguration.UserAgent)
+
+	if err := utils.PopulateQueryParams(ctx, req, request, nil); err != nil {
+		return nil, fmt.Errorf("error populating query params: %w", err)
+	}
+
+	client := s.sdkConfiguration.SecurityClient
+
+	httpRes, err := client.Do(req)
+	if err != nil {
+		return nil, fmt.Errorf("error sending request: %w", err)
+	}
+	if httpRes == nil {
+		return nil, fmt.Errorf("error sending request: no response")
+	}
+
+	rawBody, err := io.ReadAll(httpRes.Body)
+	if err != nil {
+		return nil, fmt.Errorf("error reading response body: %w", err)
+	}
+	httpRes.Body.Close()
+	httpRes.Body = io.NopCloser(bytes.NewBuffer(rawBody))
+
+	contentType := httpRes.Header.Get("Content-Type")
+
+	res := &operations.GetNpaRulesResponse{
+		StatusCode:  httpRes.StatusCode,
+		ContentType: contentType,
+		RawResponse: httpRes,
+	}
+	switch {
+	case httpRes.StatusCode == 200:
+		switch {
+		case utils.MatchContentType(contentType, `application/json`):
+			var out []shared.NpaPolicyResponseItem
+			if err := utils.UnmarshalJsonFromResponseBody(bytes.NewBuffer(rawBody), &out); err != nil {
+				return res, err
+			}
+
+			res.NpaPolicyResponse = out
+		}
+	case httpRes.StatusCode == 400:
+		switch {
+		case utils.MatchContentType(contentType, `application/json`):
+			var out *shared.NpaPolicyResponse400
+			if err := utils.UnmarshalJsonFromResponseBody(bytes.NewBuffer(rawBody), &out); err != nil {
+				return res, err
+			}
+
+			res.NpaPolicyResponse400 = out
+		}
+	}
+
+	return res, nil
+}
+
+// GetNpaRulesID - Get a npa policy
+// Get a npa policy based on policy rule id
+func (s *Platform) GetNpaRulesID(ctx context.Context, request operations.GetNpaRulesIDRequest) (*operations.GetNpaRulesIDResponse, error) {
+	baseURL := utils.ReplaceParameters(s.sdkConfiguration.GetServerDetails())
+	url, err := utils.GenerateURL(ctx, baseURL, "/npa/rules/{id}", request, nil)
+	if err != nil {
+		return nil, fmt.Errorf("error generating URL: %w", err)
+	}
+
+	req, err := http.NewRequestWithContext(ctx, "GET", url, nil)
+	if err != nil {
+		return nil, fmt.Errorf("error creating request: %w", err)
+	}
+	req.Header.Set("Accept", "application/json")
+	req.Header.Set("user-agent", s.sdkConfiguration.UserAgent)
+
+	if err := utils.PopulateQueryParams(ctx, req, request, nil); err != nil {
+		return nil, fmt.Errorf("error populating query params: %w", err)
+	}
+
+	client := s.sdkConfiguration.SecurityClient
+
+	httpRes, err := client.Do(req)
+	if err != nil {
+		return nil, fmt.Errorf("error sending request: %w", err)
+	}
+	if httpRes == nil {
+		return nil, fmt.Errorf("error sending request: no response")
+	}
+
+	rawBody, err := io.ReadAll(httpRes.Body)
+	if err != nil {
+		return nil, fmt.Errorf("error reading response body: %w", err)
+	}
+	httpRes.Body.Close()
+	httpRes.Body = io.NopCloser(bytes.NewBuffer(rawBody))
+
+	contentType := httpRes.Header.Get("Content-Type")
+
+	res := &operations.GetNpaRulesIDResponse{
+		StatusCode:  httpRes.StatusCode,
+		ContentType: contentType,
+		RawResponse: httpRes,
+	}
+	switch {
+	case httpRes.StatusCode == 200:
+		switch {
+		case utils.MatchContentType(contentType, `application/json`):
+			var out *operations.GetNpaRulesID200ApplicationJSON
+			if err := utils.UnmarshalJsonFromResponseBody(bytes.NewBuffer(rawBody), &out); err != nil {
+				return res, err
+			}
+
+			res.GetNpaRulesID200ApplicationJSONObject = out
+		}
+	case httpRes.StatusCode == 400:
+		switch {
+		case utils.MatchContentType(contentType, `application/json`):
+			var out *shared.NpaPolicyResponse400
+			if err := utils.UnmarshalJsonFromResponseBody(bytes.NewBuffer(rawBody), &out); err != nil {
+				return res, err
+			}
+
+			res.NpaPolicyResponse400 = out
+		}
+	}
+
+	return res, nil
+}
+
+// PatchNpaRulesID - Patch a npa policy
+// Patch a npa policy based on rule id
+func (s *Platform) PatchNpaRulesID(ctx context.Context, request operations.PatchNpaRulesIDRequest) (*operations.PatchNpaRulesIDResponse, error) {
+	baseURL := utils.ReplaceParameters(s.sdkConfiguration.GetServerDetails())
+	url, err := utils.GenerateURL(ctx, baseURL, "/npa/rules/{id}", request, nil)
+	if err != nil {
+		return nil, fmt.Errorf("error generating URL: %w", err)
+	}
+
+	bodyReader, reqContentType, err := utils.SerializeRequestBody(ctx, request, "NpaPolicyRequest", "json")
+	if err != nil {
+		return nil, fmt.Errorf("error serializing request body: %w", err)
+	}
+	if bodyReader == nil {
+		return nil, fmt.Errorf("request body is required")
+	}
+
+	debugBody := bytes.NewBuffer([]byte{})
+	debugReader := io.TeeReader(bodyReader, debugBody)
+
+	req, err := http.NewRequestWithContext(ctx, "PATCH", url, debugReader)
+	if err != nil {
+		return nil, fmt.Errorf("error creating request: %w", err)
+	}
+	req.Header.Set("Accept", "application/json")
+	req.Header.Set("user-agent", s.sdkConfiguration.UserAgent)
+
+	req.Header.Set("Content-Type", reqContentType)
+
+	if err := utils.PopulateQueryParams(ctx, req, request, nil); err != nil {
+		return nil, fmt.Errorf("error populating query params: %w", err)
+	}
+
+	client := s.sdkConfiguration.SecurityClient
+
+	httpRes, err := client.Do(req)
+	if err != nil {
+		return nil, fmt.Errorf("error sending request: %w", err)
+	}
+	if httpRes == nil {
+		return nil, fmt.Errorf("error sending request: no response")
+	}
+
+	rawBody, err := io.ReadAll(httpRes.Body)
+	if err != nil {
+		return nil, fmt.Errorf("error reading response body: %w", err)
+	}
+	httpRes.Request.Body = io.NopCloser(debugBody)
+	httpRes.Body.Close()
+	httpRes.Body = io.NopCloser(bytes.NewBuffer(rawBody))
+
+	contentType := httpRes.Header.Get("Content-Type")
+
+	res := &operations.PatchNpaRulesIDResponse{
+		StatusCode:  httpRes.StatusCode,
+		ContentType: contentType,
+		RawResponse: httpRes,
+	}
+	switch {
+	case httpRes.StatusCode == 200:
+		switch {
+		case utils.MatchContentType(contentType, `application/json`):
+			var out *operations.PatchNpaRulesID200ApplicationJSON
+			if err := utils.UnmarshalJsonFromResponseBody(bytes.NewBuffer(rawBody), &out); err != nil {
+				return res, err
+			}
+
+			res.PatchNpaRulesID200ApplicationJSONObject = out
+		}
+	case httpRes.StatusCode == 400:
+		switch {
+		case utils.MatchContentType(contentType, `application/json`):
+			var out *shared.NpaPolicyResponse400
+			if err := utils.UnmarshalJsonFromResponseBody(bytes.NewBuffer(rawBody), &out); err != nil {
+				return res, err
+			}
+
+			res.NpaPolicyResponse400 = out
+		}
+	}
+
+	return res, nil
+}
+
+// PostNpaRules - Create a npa policy
+// Create a policy
+func (s *Platform) PostNpaRules(ctx context.Context, request operations.PostNpaRulesRequest) (*operations.PostNpaRulesResponse, error) {
+	baseURL := utils.ReplaceParameters(s.sdkConfiguration.GetServerDetails())
+	url := strings.TrimSuffix(baseURL, "/") + "/npa/rules"
+
+	bodyReader, reqContentType, err := utils.SerializeRequestBody(ctx, request, "NpaPolicyRequest", "json")
+	if err != nil {
+		return nil, fmt.Errorf("error serializing request body: %w", err)
+	}
+	if bodyReader == nil {
+		return nil, fmt.Errorf("request body is required")
+	}
+
+	debugBody := bytes.NewBuffer([]byte{})
+	debugReader := io.TeeReader(bodyReader, debugBody)
+
+	req, err := http.NewRequestWithContext(ctx, "POST", url, debugReader)
+	if err != nil {
+		return nil, fmt.Errorf("error creating request: %w", err)
+	}
+	req.Header.Set("Accept", "application/json")
+	req.Header.Set("user-agent", s.sdkConfiguration.UserAgent)
+
+	req.Header.Set("Content-Type", reqContentType)
+
+	if err := utils.PopulateQueryParams(ctx, req, request, nil); err != nil {
+		return nil, fmt.Errorf("error populating query params: %w", err)
+	}
+
+	client := s.sdkConfiguration.SecurityClient
+
+	httpRes, err := client.Do(req)
+	if err != nil {
+		return nil, fmt.Errorf("error sending request: %w", err)
+	}
+	if httpRes == nil {
+		return nil, fmt.Errorf("error sending request: no response")
+	}
+
+	rawBody, err := io.ReadAll(httpRes.Body)
+	if err != nil {
+		return nil, fmt.Errorf("error reading response body: %w", err)
+	}
+	httpRes.Request.Body = io.NopCloser(debugBody)
+	httpRes.Body.Close()
+	httpRes.Body = io.NopCloser(bytes.NewBuffer(rawBody))
+
+	contentType := httpRes.Header.Get("Content-Type")
+
+	res := &operations.PostNpaRulesResponse{
+		StatusCode:  httpRes.StatusCode,
+		ContentType: contentType,
+		RawResponse: httpRes,
+	}
+	switch {
+	case httpRes.StatusCode == 200:
+		switch {
+		case utils.MatchContentType(contentType, `application/json`):
+			var out *shared.NpaPolicyResponseItem
+			if err := utils.UnmarshalJsonFromResponseBody(bytes.NewBuffer(rawBody), &out); err != nil {
+				return res, err
+			}
+
+			res.NpaPolicyResponseItem = out
+		}
+	case httpRes.StatusCode == 400:
+		switch {
+		case utils.MatchContentType(contentType, `application/json`):
+			var out *shared.NpaPolicyResponse400
+			if err := utils.UnmarshalJsonFromResponseBody(bytes.NewBuffer(rawBody), &out); err != nil {
+				return res, err
+			}
+
+			res.NpaPolicyResponse400 = out
+		}
+	}
+
+	return res, nil
 }

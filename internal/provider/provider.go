@@ -4,6 +4,7 @@ package provider
 
 import (
 	"Platform/internal/sdk"
+	"Platform/internal/sdk/pkg/models/shared"
 	"context"
 
 	"github.com/hashicorp/terraform-plugin-framework/datasource"
@@ -25,6 +26,7 @@ type PlatformProvider struct {
 // PlatformProviderModel describes the provider data model.
 type PlatformProviderModel struct {
 	ServerURL types.String `tfsdk:"server_url"`
+	APIKey    types.String `tfsdk:"api_key"`
 }
 
 func (p *PlatformProvider) Metadata(ctx context.Context, req provider.MetadataRequest, resp *provider.MetadataResponse) {
@@ -34,11 +36,16 @@ func (p *PlatformProvider) Metadata(ctx context.Context, req provider.MetadataRe
 
 func (p *PlatformProvider) Schema(ctx context.Context, req provider.SchemaRequest, resp *provider.SchemaResponse) {
 	resp.Schema = schema.Schema{
+		Description: `npa_policy: NPA policy CRUD operations.`,
 		Attributes: map[string]schema.Attribute{
 			"server_url": schema.StringAttribute{
-				MarkdownDescription: "Server URL (defaults to https://{{baseUrl}})",
+				MarkdownDescription: "Server URL (defaults to https://{tenant}.goskope.com:/{basePath})",
 				Optional:            true,
 				Required:            false,
+			},
+			"api_key": schema.StringAttribute{
+				Optional:  true,
+				Sensitive: true,
 			},
 		},
 	}
@@ -56,11 +63,17 @@ func (p *PlatformProvider) Configure(ctx context.Context, req provider.Configure
 	ServerURL := data.ServerURL.ValueString()
 
 	if ServerURL == "" {
-		ServerURL = "https://{{baseUrl}}"
+		ServerURL = "https://{tenant}.goskope.com:/{basePath}"
+	}
+
+	apiKey := data.APIKey.ValueString()
+	security := shared.Security{
+		APIKey: apiKey,
 	}
 
 	opts := []sdk.SDKOption{
 		sdk.WithServerURL(ServerURL),
+		sdk.WithSecurity(security),
 	}
 	client := sdk.New(opts...)
 
