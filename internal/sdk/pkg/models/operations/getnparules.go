@@ -22,6 +22,48 @@ type GetNpaRulesRequest struct {
 	Sortorder *string `queryParam:"style=form,explode=true,name=sortorder"`
 }
 
+func (o *GetNpaRulesRequest) GetFields() *string {
+	if o == nil {
+		return nil
+	}
+	return o.Fields
+}
+
+func (o *GetNpaRulesRequest) GetFilter() *string {
+	if o == nil {
+		return nil
+	}
+	return o.Filter
+}
+
+func (o *GetNpaRulesRequest) GetLimit() *int64 {
+	if o == nil {
+		return nil
+	}
+	return o.Limit
+}
+
+func (o *GetNpaRulesRequest) GetOffset() *int64 {
+	if o == nil {
+		return nil
+	}
+	return o.Offset
+}
+
+func (o *GetNpaRulesRequest) GetSortby() *string {
+	if o == nil {
+		return nil
+	}
+	return o.Sortby
+}
+
+func (o *GetNpaRulesRequest) GetSortorder() *string {
+	if o == nil {
+		return nil
+	}
+	return o.Sortorder
+}
+
 type GetNpaRulesResponse struct {
 	// HTTP response content type for this operation
 	ContentType string
@@ -33,4 +75,39 @@ type GetNpaRulesResponse struct {
 	NpaPolicyResponse []shared.NpaPolicyResponseItem
 	// Invalid request
 	NpaPolicyResponse400 *shared.NpaPolicyResponse400
+}
+
+func (o *GetNpaRulesResponse) GetContentType() string {
+	if o == nil {
+		return ""
+	}
+	return o.ContentType
+}
+
+func (o *GetNpaRulesResponse) GetStatusCode() int {
+	if o == nil {
+		return 0
+	}
+	return o.StatusCode
+}
+
+func (o *GetNpaRulesResponse) GetRawResponse() *http.Response {
+	if o == nil {
+		return nil
+	}
+	return o.RawResponse
+}
+
+func (o *GetNpaRulesResponse) GetNpaPolicyResponse() []shared.NpaPolicyResponseItem {
+	if o == nil {
+		return nil
+	}
+	return o.NpaPolicyResponse
+}
+
+func (o *GetNpaRulesResponse) GetNpaPolicyResponse400() *shared.NpaPolicyResponse400 {
+	if o == nil {
+		return nil
+	}
+	return o.NpaPolicyResponse400
 }

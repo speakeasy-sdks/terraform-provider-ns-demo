@@ -47,6 +47,34 @@ type NpaPolicyRequestRuleOrder struct {
 	RuleName *string                         `json:"rule_name,omitempty"`
 }
 
+func (o *NpaPolicyRequestRuleOrder) GetOrder() *NpaPolicyRequestRuleOrderOrder {
+	if o == nil {
+		return nil
+	}
+	return o.Order
+}
+
+func (o *NpaPolicyRequestRuleOrder) GetPosition() *int64 {
+	if o == nil {
+		return nil
+	}
+	return o.Position
+}
+
+func (o *NpaPolicyRequestRuleOrder) GetRuleID() *int64 {
+	if o == nil {
+		return nil
+	}
+	return o.RuleID
+}
+
+func (o *NpaPolicyRequestRuleOrder) GetRuleName() *string {
+	if o == nil {
+		return nil
+	}
+	return o.RuleName
+}
+
 type NpaPolicyRequest struct {
 	Description *string                    `json:"description,omitempty"`
 	Enabled     *string                    `json:"enabled,omitempty"`
@@ -55,4 +83,53 @@ type NpaPolicyRequest struct {
 	RuleData    *NpaPolicyRuleData         `json:"rule_data,omitempty"`
 	RuleName    *string                    `json:"rule_name,omitempty"`
 	RuleOrder   *NpaPolicyRequestRuleOrder `json:"rule_order,omitempty"`
+}
+
+func (o *NpaPolicyRequest) GetDescription() *string {
+	if o == nil {
+		return nil
+	}
+	return o.Description
+}
+
+func (o *NpaPolicyRequest) GetEnabled() *string {
+	if o == nil {
+		return nil
+	}
+	return o.Enabled
+}
+
+func (o *NpaPolicyRequest) GetGroupID() *string {
+	if o == nil {
+		return nil
+	}
+	return o.GroupID
+}
+
+func (o *NpaPolicyRequest) GetGroupName() *string {
+	if o == nil {
+		return nil
+	}
+	return o.GroupName
+}
+
+func (o *NpaPolicyRequest) GetRuleData() *NpaPolicyRuleData {
+	if o == nil {
+		return nil
+	}
+	return o.RuleData
+}
+
+func (o *NpaPolicyRequest) GetRuleName() *string {
+	if o == nil {
+		return nil
+	}
+	return o.RuleName
+}
+
+func (o *NpaPolicyRequest) GetRuleOrder() *NpaPolicyRequestRuleOrder {
+	if o == nil {
+		return nil
+	}
+	return o.RuleOrder
 }

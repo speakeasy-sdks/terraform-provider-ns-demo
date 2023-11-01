@@ -43,6 +43,20 @@ type PostNpaRulesRequest struct {
 	Silent *PostNpaRulesSilent `queryParam:"style=form,explode=true,name=silent"`
 }
 
+func (o *PostNpaRulesRequest) GetNpaPolicyRequest() shared.NpaPolicyRequest {
+	if o == nil {
+		return shared.NpaPolicyRequest{}
+	}
+	return o.NpaPolicyRequest
+}
+
+func (o *PostNpaRulesRequest) GetSilent() *PostNpaRulesSilent {
+	if o == nil {
+		return nil
+	}
+	return o.Silent
+}
+
 type PostNpaRulesResponse struct {
 	// HTTP response content type for this operation
 	ContentType string
@@ -54,4 +68,39 @@ type PostNpaRulesResponse struct {
 	NpaPolicyResponse400 *shared.NpaPolicyResponse400
 	// successful operation
 	NpaPolicyResponseItem *shared.NpaPolicyResponseItem
+}
+
+func (o *PostNpaRulesResponse) GetContentType() string {
+	if o == nil {
+		return ""
+	}
+	return o.ContentType
+}
+
+func (o *PostNpaRulesResponse) GetStatusCode() int {
+	if o == nil {
+		return 0
+	}
+	return o.StatusCode
+}
+
+func (o *PostNpaRulesResponse) GetRawResponse() *http.Response {
+	if o == nil {
+		return nil
+	}
+	return o.RawResponse
+}
+
+func (o *PostNpaRulesResponse) GetNpaPolicyResponse400() *shared.NpaPolicyResponse400 {
+	if o == nil {
+		return nil
+	}
+	return o.NpaPolicyResponse400
+}
+
+func (o *PostNpaRulesResponse) GetNpaPolicyResponseItem() *shared.NpaPolicyResponseItem {
+	if o == nil {
+		return nil
+	}
+	return o.NpaPolicyResponseItem
 }

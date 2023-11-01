@@ -14,6 +14,13 @@ type DeleteNpaRulesIDRequest struct {
 	ID int `pathParam:"style=simple,explode=false,name=id"`
 }
 
+func (o *DeleteNpaRulesIDRequest) GetID() int {
+	if o == nil {
+		return 0
+	}
+	return o.ID
+}
+
 type DeleteNpaRulesID200ApplicationJSONStatus string
 
 const (
@@ -47,6 +54,20 @@ type DeleteNpaRulesID200ApplicationJSON struct {
 	Status *DeleteNpaRulesID200ApplicationJSONStatus `json:"status,omitempty"`
 }
 
+func (o *DeleteNpaRulesID200ApplicationJSON) GetData() *shared.NpaPolicyResponseItem {
+	if o == nil {
+		return nil
+	}
+	return o.Data
+}
+
+func (o *DeleteNpaRulesID200ApplicationJSON) GetStatus() *DeleteNpaRulesID200ApplicationJSONStatus {
+	if o == nil {
+		return nil
+	}
+	return o.Status
+}
+
 type DeleteNpaRulesIDResponse struct {
 	// HTTP response content type for this operation
 	ContentType string
@@ -58,4 +79,39 @@ type DeleteNpaRulesIDResponse struct {
 	DeleteNpaRulesID200ApplicationJSONObject *DeleteNpaRulesID200ApplicationJSON
 	// Invalid request
 	NpaPolicyResponse400 *shared.NpaPolicyResponse400
+}
+
+func (o *DeleteNpaRulesIDResponse) GetContentType() string {
+	if o == nil {
+		return ""
+	}
+	return o.ContentType
+}
+
+func (o *DeleteNpaRulesIDResponse) GetStatusCode() int {
+	if o == nil {
+		return 0
+	}
+	return o.StatusCode
+}
+
+func (o *DeleteNpaRulesIDResponse) GetRawResponse() *http.Response {
+	if o == nil {
+		return nil
+	}
+	return o.RawResponse
+}
+
+func (o *DeleteNpaRulesIDResponse) GetDeleteNpaRulesID200ApplicationJSONObject() *DeleteNpaRulesID200ApplicationJSON {
+	if o == nil {
+		return nil
+	}
+	return o.DeleteNpaRulesID200ApplicationJSONObject
+}
+
+func (o *DeleteNpaRulesIDResponse) GetNpaPolicyResponse400() *shared.NpaPolicyResponse400 {
+	if o == nil {
+		return nil
+	}
+	return o.NpaPolicyResponse400
 }

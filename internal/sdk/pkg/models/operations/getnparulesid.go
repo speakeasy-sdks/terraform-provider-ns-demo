@@ -16,6 +16,20 @@ type GetNpaRulesIDRequest struct {
 	ID int `pathParam:"style=simple,explode=false,name=id"`
 }
 
+func (o *GetNpaRulesIDRequest) GetFields() *string {
+	if o == nil {
+		return nil
+	}
+	return o.Fields
+}
+
+func (o *GetNpaRulesIDRequest) GetID() int {
+	if o == nil {
+		return 0
+	}
+	return o.ID
+}
+
 type GetNpaRulesID200ApplicationJSONStatus string
 
 const (
@@ -49,6 +63,20 @@ type GetNpaRulesID200ApplicationJSON struct {
 	Status *GetNpaRulesID200ApplicationJSONStatus `json:"status,omitempty"`
 }
 
+func (o *GetNpaRulesID200ApplicationJSON) GetData() *shared.NpaPolicyResponseItem {
+	if o == nil {
+		return nil
+	}
+	return o.Data
+}
+
+func (o *GetNpaRulesID200ApplicationJSON) GetStatus() *GetNpaRulesID200ApplicationJSONStatus {
+	if o == nil {
+		return nil
+	}
+	return o.Status
+}
+
 type GetNpaRulesIDResponse struct {
 	// HTTP response content type for this operation
 	ContentType string
@@ -60,4 +88,39 @@ type GetNpaRulesIDResponse struct {
 	GetNpaRulesID200ApplicationJSONObject *GetNpaRulesID200ApplicationJSON
 	// Invalid request
 	NpaPolicyResponse400 *shared.NpaPolicyResponse400
+}
+
+func (o *GetNpaRulesIDResponse) GetContentType() string {
+	if o == nil {
+		return ""
+	}
+	return o.ContentType
+}
+
+func (o *GetNpaRulesIDResponse) GetStatusCode() int {
+	if o == nil {
+		return 0
+	}
+	return o.StatusCode
+}
+
+func (o *GetNpaRulesIDResponse) GetRawResponse() *http.Response {
+	if o == nil {
+		return nil
+	}
+	return o.RawResponse
+}
+
+func (o *GetNpaRulesIDResponse) GetGetNpaRulesID200ApplicationJSONObject() *GetNpaRulesID200ApplicationJSON {
+	if o == nil {
+		return nil
+	}
+	return o.GetNpaRulesID200ApplicationJSONObject
+}
+
+func (o *GetNpaRulesIDResponse) GetNpaPolicyResponse400() *shared.NpaPolicyResponse400 {
+	if o == nil {
+		return nil
+	}
+	return o.NpaPolicyResponse400
 }

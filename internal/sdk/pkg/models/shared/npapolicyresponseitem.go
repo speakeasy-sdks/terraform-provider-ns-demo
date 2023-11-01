@@ -8,3 +8,31 @@ type NpaPolicyResponseItem struct {
 	RuleID   *int64             `json:"rule_id,omitempty"`
 	RuleName *string            `json:"rule_name,omitempty"`
 }
+
+func (o *NpaPolicyResponseItem) GetGroupID() *int64 {
+	if o == nil {
+		return nil
+	}
+	return o.GroupID
+}
+
+func (o *NpaPolicyResponseItem) GetRuleData() *NpaPolicyRuleData {
+	if o == nil {
+		return nil
+	}
+	return o.RuleData
+}
+
+func (o *NpaPolicyResponseItem) GetRuleID() *int64 {
+	if o == nil {
+		return nil
+	}
+	return o.RuleID
+}
+
+func (o *NpaPolicyResponseItem) GetRuleName() *string {
+	if o == nil {
+		return nil
+	}
+	return o.RuleName
+}

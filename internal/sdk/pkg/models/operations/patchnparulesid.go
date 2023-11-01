@@ -45,6 +45,27 @@ type PatchNpaRulesIDRequest struct {
 	Silent *PatchNpaRulesIDSilent `queryParam:"style=form,explode=true,name=silent"`
 }
 
+func (o *PatchNpaRulesIDRequest) GetID() int {
+	if o == nil {
+		return 0
+	}
+	return o.ID
+}
+
+func (o *PatchNpaRulesIDRequest) GetNpaPolicyRequest() shared.NpaPolicyRequest {
+	if o == nil {
+		return shared.NpaPolicyRequest{}
+	}
+	return o.NpaPolicyRequest
+}
+
+func (o *PatchNpaRulesIDRequest) GetSilent() *PatchNpaRulesIDSilent {
+	if o == nil {
+		return nil
+	}
+	return o.Silent
+}
+
 type PatchNpaRulesID200ApplicationJSONStatus string
 
 const (
@@ -78,6 +99,20 @@ type PatchNpaRulesID200ApplicationJSON struct {
 	Status *PatchNpaRulesID200ApplicationJSONStatus `json:"status,omitempty"`
 }
 
+func (o *PatchNpaRulesID200ApplicationJSON) GetData() *shared.NpaPolicyResponseItem {
+	if o == nil {
+		return nil
+	}
+	return o.Data
+}
+
+func (o *PatchNpaRulesID200ApplicationJSON) GetStatus() *PatchNpaRulesID200ApplicationJSONStatus {
+	if o == nil {
+		return nil
+	}
+	return o.Status
+}
+
 type PatchNpaRulesIDResponse struct {
 	// HTTP response content type for this operation
 	ContentType string
@@ -89,4 +124,39 @@ type PatchNpaRulesIDResponse struct {
 	NpaPolicyResponse400 *shared.NpaPolicyResponse400
 	// successful operation
 	PatchNpaRulesID200ApplicationJSONObject *PatchNpaRulesID200ApplicationJSON
+}
+
+func (o *PatchNpaRulesIDResponse) GetContentType() string {
+	if o == nil {
+		return ""
+	}
+	return o.ContentType
+}
+
+func (o *PatchNpaRulesIDResponse) GetStatusCode() int {
+	if o == nil {
+		return 0
+	}
+	return o.StatusCode
+}
+
+func (o *PatchNpaRulesIDResponse) GetRawResponse() *http.Response {
+	if o == nil {
+		return nil
+	}
+	return o.RawResponse
+}
+
+func (o *PatchNpaRulesIDResponse) GetNpaPolicyResponse400() *shared.NpaPolicyResponse400 {
+	if o == nil {
+		return nil
+	}
+	return o.NpaPolicyResponse400
+}
+
+func (o *PatchNpaRulesIDResponse) GetPatchNpaRulesID200ApplicationJSONObject() *PatchNpaRulesID200ApplicationJSON {
+	if o == nil {
+		return nil
+	}
+	return o.PatchNpaRulesID200ApplicationJSONObject
 }
