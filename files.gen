@@ -55,10 +55,10 @@ internal/sdk/pkg/models/operations/getnparules.go
 internal/sdk/pkg/models/operations/getnparulesid.go
 internal/sdk/pkg/models/operations/patchnparulesid.go
 internal/sdk/pkg/models/operations/postnparules.go
-internal/sdk/pkg/models/shared/npapolicyresponse400.go
 internal/sdk/pkg/models/shared/npapolicyresponseitem.go
 internal/sdk/pkg/models/shared/npapolicyruledata.go
 internal/sdk/pkg/models/shared/npapolicyruledlp.go
+internal/sdk/pkg/models/shared/npapolicyresponse400.go
 internal/sdk/pkg/models/shared/npapolicyrequest.go
 internal/sdk/pkg/models/shared/security.go
 USAGE.md

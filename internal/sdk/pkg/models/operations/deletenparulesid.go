@@ -21,18 +21,18 @@ func (o *DeleteNpaRulesIDRequest) GetID() int {
 	return o.ID
 }
 
-type DeleteNpaRulesID200ApplicationJSONStatus string
+type Status string
 
 const (
-	DeleteNpaRulesID200ApplicationJSONStatusSuccess DeleteNpaRulesID200ApplicationJSONStatus = "success"
-	DeleteNpaRulesID200ApplicationJSONStatusError   DeleteNpaRulesID200ApplicationJSONStatus = "error"
+	StatusSuccess Status = "success"
+	StatusError   Status = "error"
 )
 
-func (e DeleteNpaRulesID200ApplicationJSONStatus) ToPointer() *DeleteNpaRulesID200ApplicationJSONStatus {
+func (e Status) ToPointer() *Status {
 	return &e
 }
 
-func (e *DeleteNpaRulesID200ApplicationJSONStatus) UnmarshalJSON(data []byte) error {
+func (e *Status) UnmarshalJSON(data []byte) error {
 	var v string
 	if err := json.Unmarshal(data, &v); err != nil {
 		return err
@@ -41,27 +41,27 @@ func (e *DeleteNpaRulesID200ApplicationJSONStatus) UnmarshalJSON(data []byte) er
 	case "success":
 		fallthrough
 	case "error":
-		*e = DeleteNpaRulesID200ApplicationJSONStatus(v)
+		*e = Status(v)
 		return nil
 	default:
-		return fmt.Errorf("invalid value for DeleteNpaRulesID200ApplicationJSONStatus: %v", v)
+		return fmt.Errorf("invalid value for Status: %v", v)
 	}
 }
 
-// DeleteNpaRulesID200ApplicationJSON - successful operation
-type DeleteNpaRulesID200ApplicationJSON struct {
-	Data   *shared.NpaPolicyResponseItem             `json:"data,omitempty"`
-	Status *DeleteNpaRulesID200ApplicationJSONStatus `json:"status,omitempty"`
+// DeleteNpaRulesIDResponseBody - successful operation
+type DeleteNpaRulesIDResponseBody struct {
+	Data   *shared.NpaPolicyResponseItem `json:"data,omitempty"`
+	Status *Status                       `json:"status,omitempty"`
 }
 
-func (o *DeleteNpaRulesID200ApplicationJSON) GetData() *shared.NpaPolicyResponseItem {
+func (o *DeleteNpaRulesIDResponseBody) GetData() *shared.NpaPolicyResponseItem {
 	if o == nil {
 		return nil
 	}
 	return o.Data
 }
 
-func (o *DeleteNpaRulesID200ApplicationJSON) GetStatus() *DeleteNpaRulesID200ApplicationJSONStatus {
+func (o *DeleteNpaRulesIDResponseBody) GetStatus() *Status {
 	if o == nil {
 		return nil
 	}
@@ -75,10 +75,10 @@ type DeleteNpaRulesIDResponse struct {
 	StatusCode int
 	// Raw HTTP response; suitable for custom response parsing
 	RawResponse *http.Response
-	// successful operation
-	DeleteNpaRulesID200ApplicationJSONObject *DeleteNpaRulesID200ApplicationJSON
 	// Invalid request
 	NpaPolicyResponse400 *shared.NpaPolicyResponse400
+	// successful operation
+	Object *DeleteNpaRulesIDResponseBody
 }
 
 func (o *DeleteNpaRulesIDResponse) GetContentType() string {
@@ -102,16 +102,16 @@ func (o *DeleteNpaRulesIDResponse) GetRawResponse() *http.Response {
 	return o.RawResponse
 }
 
-func (o *DeleteNpaRulesIDResponse) GetDeleteNpaRulesID200ApplicationJSONObject() *DeleteNpaRulesID200ApplicationJSON {
-	if o == nil {
-		return nil
-	}
-	return o.DeleteNpaRulesID200ApplicationJSONObject
-}
-
 func (o *DeleteNpaRulesIDResponse) GetNpaPolicyResponse400() *shared.NpaPolicyResponse400 {
 	if o == nil {
 		return nil
 	}
 	return o.NpaPolicyResponse400
+}
+
+func (o *DeleteNpaRulesIDResponse) GetObject() *DeleteNpaRulesIDResponseBody {
+	if o == nil {
+		return nil
+	}
+	return o.Object
 }

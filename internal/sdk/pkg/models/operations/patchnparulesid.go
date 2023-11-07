@@ -9,19 +9,19 @@ import (
 	"net/http"
 )
 
-// PatchNpaRulesIDSilent - flag to skip output except status code
-type PatchNpaRulesIDSilent string
+// Silent - flag to skip output except status code
+type Silent string
 
 const (
-	PatchNpaRulesIDSilentOne  PatchNpaRulesIDSilent = "1"
-	PatchNpaRulesIDSilentZero PatchNpaRulesIDSilent = "0"
+	SilentOne  Silent = "1"
+	SilentZero Silent = "0"
 )
 
-func (e PatchNpaRulesIDSilent) ToPointer() *PatchNpaRulesIDSilent {
+func (e Silent) ToPointer() *Silent {
 	return &e
 }
 
-func (e *PatchNpaRulesIDSilent) UnmarshalJSON(data []byte) error {
+func (e *Silent) UnmarshalJSON(data []byte) error {
 	var v string
 	if err := json.Unmarshal(data, &v); err != nil {
 		return err
@@ -30,10 +30,10 @@ func (e *PatchNpaRulesIDSilent) UnmarshalJSON(data []byte) error {
 	case "1":
 		fallthrough
 	case "0":
-		*e = PatchNpaRulesIDSilent(v)
+		*e = Silent(v)
 		return nil
 	default:
-		return fmt.Errorf("invalid value for PatchNpaRulesIDSilent: %v", v)
+		return fmt.Errorf("invalid value for Silent: %v", v)
 	}
 }
 
@@ -42,7 +42,7 @@ type PatchNpaRulesIDRequest struct {
 	ID               int                     `pathParam:"style=simple,explode=false,name=id"`
 	NpaPolicyRequest shared.NpaPolicyRequest `request:"mediaType=application/json"`
 	// flag to skip output except status code
-	Silent *PatchNpaRulesIDSilent `queryParam:"style=form,explode=true,name=silent"`
+	Silent *Silent `queryParam:"style=form,explode=true,name=silent"`
 }
 
 func (o *PatchNpaRulesIDRequest) GetID() int {
@@ -59,25 +59,25 @@ func (o *PatchNpaRulesIDRequest) GetNpaPolicyRequest() shared.NpaPolicyRequest {
 	return o.NpaPolicyRequest
 }
 
-func (o *PatchNpaRulesIDRequest) GetSilent() *PatchNpaRulesIDSilent {
+func (o *PatchNpaRulesIDRequest) GetSilent() *Silent {
 	if o == nil {
 		return nil
 	}
 	return o.Silent
 }
 
-type PatchNpaRulesID200ApplicationJSONStatus string
+type PatchNpaRulesIDStatus string
 
 const (
-	PatchNpaRulesID200ApplicationJSONStatusSuccess PatchNpaRulesID200ApplicationJSONStatus = "success"
-	PatchNpaRulesID200ApplicationJSONStatusError   PatchNpaRulesID200ApplicationJSONStatus = "error"
+	PatchNpaRulesIDStatusSuccess PatchNpaRulesIDStatus = "success"
+	PatchNpaRulesIDStatusError   PatchNpaRulesIDStatus = "error"
 )
 
-func (e PatchNpaRulesID200ApplicationJSONStatus) ToPointer() *PatchNpaRulesID200ApplicationJSONStatus {
+func (e PatchNpaRulesIDStatus) ToPointer() *PatchNpaRulesIDStatus {
 	return &e
 }
 
-func (e *PatchNpaRulesID200ApplicationJSONStatus) UnmarshalJSON(data []byte) error {
+func (e *PatchNpaRulesIDStatus) UnmarshalJSON(data []byte) error {
 	var v string
 	if err := json.Unmarshal(data, &v); err != nil {
 		return err
@@ -86,27 +86,27 @@ func (e *PatchNpaRulesID200ApplicationJSONStatus) UnmarshalJSON(data []byte) err
 	case "success":
 		fallthrough
 	case "error":
-		*e = PatchNpaRulesID200ApplicationJSONStatus(v)
+		*e = PatchNpaRulesIDStatus(v)
 		return nil
 	default:
-		return fmt.Errorf("invalid value for PatchNpaRulesID200ApplicationJSONStatus: %v", v)
+		return fmt.Errorf("invalid value for PatchNpaRulesIDStatus: %v", v)
 	}
 }
 
-// PatchNpaRulesID200ApplicationJSON - successful operation
-type PatchNpaRulesID200ApplicationJSON struct {
-	Data   *shared.NpaPolicyResponseItem            `json:"data,omitempty"`
-	Status *PatchNpaRulesID200ApplicationJSONStatus `json:"status,omitempty"`
+// PatchNpaRulesIDResponseBody - successful operation
+type PatchNpaRulesIDResponseBody struct {
+	Data   *shared.NpaPolicyResponseItem `json:"data,omitempty"`
+	Status *PatchNpaRulesIDStatus        `json:"status,omitempty"`
 }
 
-func (o *PatchNpaRulesID200ApplicationJSON) GetData() *shared.NpaPolicyResponseItem {
+func (o *PatchNpaRulesIDResponseBody) GetData() *shared.NpaPolicyResponseItem {
 	if o == nil {
 		return nil
 	}
 	return o.Data
 }
 
-func (o *PatchNpaRulesID200ApplicationJSON) GetStatus() *PatchNpaRulesID200ApplicationJSONStatus {
+func (o *PatchNpaRulesIDResponseBody) GetStatus() *PatchNpaRulesIDStatus {
 	if o == nil {
 		return nil
 	}
@@ -123,7 +123,7 @@ type PatchNpaRulesIDResponse struct {
 	// Invalid request
 	NpaPolicyResponse400 *shared.NpaPolicyResponse400
 	// successful operation
-	PatchNpaRulesID200ApplicationJSONObject *PatchNpaRulesID200ApplicationJSON
+	Object *PatchNpaRulesIDResponseBody
 }
 
 func (o *PatchNpaRulesIDResponse) GetContentType() string {
@@ -154,9 +154,9 @@ func (o *PatchNpaRulesIDResponse) GetNpaPolicyResponse400() *shared.NpaPolicyRes
 	return o.NpaPolicyResponse400
 }
 
-func (o *PatchNpaRulesIDResponse) GetPatchNpaRulesID200ApplicationJSONObject() *PatchNpaRulesID200ApplicationJSON {
+func (o *PatchNpaRulesIDResponse) GetObject() *PatchNpaRulesIDResponseBody {
 	if o == nil {
 		return nil
 	}
-	return o.PatchNpaRulesID200ApplicationJSONObject
+	return o.Object
 }

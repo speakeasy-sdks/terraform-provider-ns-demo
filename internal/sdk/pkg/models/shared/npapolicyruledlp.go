@@ -7,21 +7,21 @@ import (
 	"fmt"
 )
 
-type NpaPolicyRuleDlpActions string
+type Actions string
 
 const (
-	NpaPolicyRuleDlpActionsAllow       NpaPolicyRuleDlpActions = "allow"
-	NpaPolicyRuleDlpActionsBlock       NpaPolicyRuleDlpActions = "block"
-	NpaPolicyRuleDlpActionsAlert       NpaPolicyRuleDlpActions = "alert"
-	NpaPolicyRuleDlpActionsQuanrantine NpaPolicyRuleDlpActions = "quanrantine"
-	NpaPolicyRuleDlpActionsBypass      NpaPolicyRuleDlpActions = "bypass"
+	ActionsAllow       Actions = "allow"
+	ActionsBlock       Actions = "block"
+	ActionsAlert       Actions = "alert"
+	ActionsQuanrantine Actions = "quanrantine"
+	ActionsBypass      Actions = "bypass"
 )
 
-func (e NpaPolicyRuleDlpActions) ToPointer() *NpaPolicyRuleDlpActions {
+func (e Actions) ToPointer() *Actions {
 	return &e
 }
 
-func (e *NpaPolicyRuleDlpActions) UnmarshalJSON(data []byte) error {
+func (e *Actions) UnmarshalJSON(data []byte) error {
 	var v string
 	if err := json.Unmarshal(data, &v); err != nil {
 		return err
@@ -36,19 +36,19 @@ func (e *NpaPolicyRuleDlpActions) UnmarshalJSON(data []byte) error {
 	case "quanrantine":
 		fallthrough
 	case "bypass":
-		*e = NpaPolicyRuleDlpActions(v)
+		*e = Actions(v)
 		return nil
 	default:
-		return fmt.Errorf("invalid value for NpaPolicyRuleDlpActions: %v", v)
+		return fmt.Errorf("invalid value for Actions: %v", v)
 	}
 }
 
 type NpaPolicyRuleDlp struct {
-	Actions    []NpaPolicyRuleDlpActions `json:"actions,omitempty"`
-	DlpProfile *string                   `json:"dlp_profile,omitempty"`
+	Actions    []Actions `json:"actions,omitempty"`
+	DlpProfile *string   `json:"dlp_profile,omitempty"`
 }
 
-func (o *NpaPolicyRuleDlp) GetActions() []NpaPolicyRuleDlpActions {
+func (o *NpaPolicyRuleDlp) GetActions() []Actions {
 	if o == nil {
 		return nil
 	}

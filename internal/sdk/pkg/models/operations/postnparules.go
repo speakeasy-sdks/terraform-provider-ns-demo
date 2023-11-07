@@ -9,19 +9,19 @@ import (
 	"net/http"
 )
 
-// PostNpaRulesSilent - flag to skip output except status code
-type PostNpaRulesSilent string
+// QueryParamSilent - flag to skip output except status code
+type QueryParamSilent string
 
 const (
-	PostNpaRulesSilentOne  PostNpaRulesSilent = "1"
-	PostNpaRulesSilentZero PostNpaRulesSilent = "0"
+	QueryParamSilentOne  QueryParamSilent = "1"
+	QueryParamSilentZero QueryParamSilent = "0"
 )
 
-func (e PostNpaRulesSilent) ToPointer() *PostNpaRulesSilent {
+func (e QueryParamSilent) ToPointer() *QueryParamSilent {
 	return &e
 }
 
-func (e *PostNpaRulesSilent) UnmarshalJSON(data []byte) error {
+func (e *QueryParamSilent) UnmarshalJSON(data []byte) error {
 	var v string
 	if err := json.Unmarshal(data, &v); err != nil {
 		return err
@@ -30,17 +30,17 @@ func (e *PostNpaRulesSilent) UnmarshalJSON(data []byte) error {
 	case "1":
 		fallthrough
 	case "0":
-		*e = PostNpaRulesSilent(v)
+		*e = QueryParamSilent(v)
 		return nil
 	default:
-		return fmt.Errorf("invalid value for PostNpaRulesSilent: %v", v)
+		return fmt.Errorf("invalid value for QueryParamSilent: %v", v)
 	}
 }
 
 type PostNpaRulesRequest struct {
 	NpaPolicyRequest shared.NpaPolicyRequest `request:"mediaType=application/json"`
 	// flag to skip output except status code
-	Silent *PostNpaRulesSilent `queryParam:"style=form,explode=true,name=silent"`
+	Silent *QueryParamSilent `queryParam:"style=form,explode=true,name=silent"`
 }
 
 func (o *PostNpaRulesRequest) GetNpaPolicyRequest() shared.NpaPolicyRequest {
@@ -50,7 +50,7 @@ func (o *PostNpaRulesRequest) GetNpaPolicyRequest() shared.NpaPolicyRequest {
 	return o.NpaPolicyRequest
 }
 
-func (o *PostNpaRulesRequest) GetSilent() *PostNpaRulesSilent {
+func (o *PostNpaRulesRequest) GetSilent() *QueryParamSilent {
 	if o == nil {
 		return nil
 	}

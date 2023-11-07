@@ -7,20 +7,20 @@ import (
 	"fmt"
 )
 
-type NpaPolicyRequestRuleOrderOrder string
+type Order string
 
 const (
-	NpaPolicyRequestRuleOrderOrderTop    NpaPolicyRequestRuleOrderOrder = "top"
-	NpaPolicyRequestRuleOrderOrderBottom NpaPolicyRequestRuleOrderOrder = "bottom"
-	NpaPolicyRequestRuleOrderOrderBefore NpaPolicyRequestRuleOrderOrder = "before"
-	NpaPolicyRequestRuleOrderOrderAfter  NpaPolicyRequestRuleOrderOrder = "after"
+	OrderTop    Order = "top"
+	OrderBottom Order = "bottom"
+	OrderBefore Order = "before"
+	OrderAfter  Order = "after"
 )
 
-func (e NpaPolicyRequestRuleOrderOrder) ToPointer() *NpaPolicyRequestRuleOrderOrder {
+func (e Order) ToPointer() *Order {
 	return &e
 }
 
-func (e *NpaPolicyRequestRuleOrderOrder) UnmarshalJSON(data []byte) error {
+func (e *Order) UnmarshalJSON(data []byte) error {
 	var v string
 	if err := json.Unmarshal(data, &v); err != nil {
 		return err
@@ -33,42 +33,42 @@ func (e *NpaPolicyRequestRuleOrderOrder) UnmarshalJSON(data []byte) error {
 	case "before":
 		fallthrough
 	case "after":
-		*e = NpaPolicyRequestRuleOrderOrder(v)
+		*e = Order(v)
 		return nil
 	default:
-		return fmt.Errorf("invalid value for NpaPolicyRequestRuleOrderOrder: %v", v)
+		return fmt.Errorf("invalid value for Order: %v", v)
 	}
 }
 
-type NpaPolicyRequestRuleOrder struct {
-	Order    *NpaPolicyRequestRuleOrderOrder `json:"order,omitempty"`
-	Position *int64                          `json:"position,omitempty"`
-	RuleID   *int64                          `json:"rule_id,omitempty"`
-	RuleName *string                         `json:"rule_name,omitempty"`
+type RuleOrder struct {
+	Order    *Order  `json:"order,omitempty"`
+	Position *int64  `json:"position,omitempty"`
+	RuleID   *int64  `json:"rule_id,omitempty"`
+	RuleName *string `json:"rule_name,omitempty"`
 }
 
-func (o *NpaPolicyRequestRuleOrder) GetOrder() *NpaPolicyRequestRuleOrderOrder {
+func (o *RuleOrder) GetOrder() *Order {
 	if o == nil {
 		return nil
 	}
 	return o.Order
 }
 
-func (o *NpaPolicyRequestRuleOrder) GetPosition() *int64 {
+func (o *RuleOrder) GetPosition() *int64 {
 	if o == nil {
 		return nil
 	}
 	return o.Position
 }
 
-func (o *NpaPolicyRequestRuleOrder) GetRuleID() *int64 {
+func (o *RuleOrder) GetRuleID() *int64 {
 	if o == nil {
 		return nil
 	}
 	return o.RuleID
 }
 
-func (o *NpaPolicyRequestRuleOrder) GetRuleName() *string {
+func (o *RuleOrder) GetRuleName() *string {
 	if o == nil {
 		return nil
 	}
@@ -76,13 +76,13 @@ func (o *NpaPolicyRequestRuleOrder) GetRuleName() *string {
 }
 
 type NpaPolicyRequest struct {
-	Description *string                    `json:"description,omitempty"`
-	Enabled     *string                    `json:"enabled,omitempty"`
-	GroupID     *string                    `json:"group_id,omitempty"`
-	GroupName   *string                    `json:"group_name,omitempty"`
-	RuleData    *NpaPolicyRuleData         `json:"rule_data,omitempty"`
-	RuleName    *string                    `json:"rule_name,omitempty"`
-	RuleOrder   *NpaPolicyRequestRuleOrder `json:"rule_order,omitempty"`
+	Description *string            `json:"description,omitempty"`
+	Enabled     *string            `json:"enabled,omitempty"`
+	GroupID     *string            `json:"group_id,omitempty"`
+	GroupName   *string            `json:"group_name,omitempty"`
+	RuleData    *NpaPolicyRuleData `json:"rule_data,omitempty"`
+	RuleName    *string            `json:"rule_name,omitempty"`
+	RuleOrder   *RuleOrder         `json:"rule_order,omitempty"`
 }
 
 func (o *NpaPolicyRequest) GetDescription() *string {
@@ -127,7 +127,7 @@ func (o *NpaPolicyRequest) GetRuleName() *string {
 	return o.RuleName
 }
 
-func (o *NpaPolicyRequest) GetRuleOrder() *NpaPolicyRequestRuleOrder {
+func (o *NpaPolicyRequest) GetRuleOrder() *RuleOrder {
 	if o == nil {
 		return nil
 	}
