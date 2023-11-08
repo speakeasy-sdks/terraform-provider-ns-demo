@@ -3,7 +3,7 @@
 package operations
 
 import (
-	"Platform/internal/sdk/pkg/models/shared"
+	"github.com/API-Dev-NS/terraform-provider-Platform/internal/sdk/pkg/models/shared"
 	"net/http"
 )
 

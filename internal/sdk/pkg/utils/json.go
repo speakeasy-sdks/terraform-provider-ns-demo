@@ -12,7 +12,7 @@ import (
 	"time"
 	"unsafe"
 
-	"Platform/internal/sdk/pkg/types"
+	"github.com/API-Dev-NS/terraform-provider-Platform/internal/sdk/pkg/types"
 
 	"github.com/ericlagergren/decimal"
 )

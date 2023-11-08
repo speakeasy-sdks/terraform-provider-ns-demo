@@ -3,9 +3,9 @@
 package provider
 
 import (
-	"Platform/internal/sdk"
-	"Platform/internal/sdk/pkg/models/shared"
 	"context"
+	"github.com/API-Dev-NS/terraform-provider-Platform/internal/sdk"
+	"github.com/API-Dev-NS/terraform-provider-Platform/internal/sdk/pkg/models/shared"
 
 	"github.com/hashicorp/terraform-plugin-framework/datasource"
 	"github.com/hashicorp/terraform-plugin-framework/provider"

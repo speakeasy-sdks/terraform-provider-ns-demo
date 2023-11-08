@@ -3,13 +3,13 @@
 package sdk
 
 import (
-	"Platform/internal/sdk/pkg/models/operations"
-	"Platform/internal/sdk/pkg/models/sdkerrors"
-	"Platform/internal/sdk/pkg/models/shared"
-	"Platform/internal/sdk/pkg/utils"
 	"bytes"
 	"context"
 	"fmt"
+	"github.com/API-Dev-NS/terraform-provider-Platform/internal/sdk/pkg/models/operations"
+	"github.com/API-Dev-NS/terraform-provider-Platform/internal/sdk/pkg/models/sdkerrors"
+	"github.com/API-Dev-NS/terraform-provider-Platform/internal/sdk/pkg/models/shared"
+	"github.com/API-Dev-NS/terraform-provider-Platform/internal/sdk/pkg/utils"
 	"io"
 	"net/http"
 	"strings"
@@ -171,9 +171,9 @@ func New(opts ...SDKOption) *Platform {
 		sdkConfiguration: sdkConfiguration{
 			Language:          "go",
 			OpenAPIDocVersion: "1.0.0",
-			SDKVersion:        "0.3.0",
-			GenVersion:        "2.181.1",
-			UserAgent:         "speakeasy-sdk/go 0.3.0 2.181.1 1.0.0 Platform",
+			SDKVersion:        "0.4.0",
+			GenVersion:        "2.183.0",
+			UserAgent:         "speakeasy-sdk/go 0.4.0 2.183.0 1.0.0 Platform",
 			ServerDefaults: []map[string]string{
 				{
 					"basePath": "api/v2",

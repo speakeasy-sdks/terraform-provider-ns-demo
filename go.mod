@@ -1,4 +1,4 @@
-module Platform
+module github.com/API-Dev-NS/terraform-provider-Platform
 
 go 1.18
 

@@ -3,8 +3,8 @@
 package setplanmodifier
 
 import (
-	"Platform/internal/planmodifiers/utils"
 	"context"
+	"github.com/API-Dev-NS/terraform-provider-Platform/internal/planmodifiers/utils"
 
 	"github.com/hashicorp/terraform-plugin-framework/resource/schema/planmodifier"
 )

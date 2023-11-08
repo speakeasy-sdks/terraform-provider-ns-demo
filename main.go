@@ -7,7 +7,7 @@ import (
 	"flag"
 	"log"
 
-	"Platform/internal/provider"
+	"github.com/API-Dev-NS/terraform-provider-Platform/internal/provider"
 	"github.com/hashicorp/terraform-plugin-framework/providerserver"
 )
 
