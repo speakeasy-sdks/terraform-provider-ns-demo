@@ -71,7 +71,7 @@ terraform {
   required_providers {
     Platform = {
       source  = "API-Dev-NS/Platform"
-      version = "0.6.1"
+      version = "0.7.0"
     }
   }
 }
@@ -109,6 +109,8 @@ TF_REATTACH_PROVIDERS=... terraform apply
 
 <!-- Start Available Resources and Operations [operations] -->
 ## Available Resources and Operations
+
+
 <!-- End Available Resources and Operations [operations] -->
 
 
