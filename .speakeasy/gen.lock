@@ -4,15 +4,15 @@ management:
   docChecksum: 2ce558252cc48bc50ccfd24efecd3cf4
   docVersion: 1.0.0
   speakeasyVersion: internal
-  generationVersion: 2.225.2
-  releaseVersion: 0.7.0
-  configChecksum: 1a8c712dacf6db9201cbbda7833e5cce
+  generationVersion: 2.228.1
+  releaseVersion: 0.8.0
+  configChecksum: eb2dbc99626a26fbf72ab0e28db20d39
   repoURL: https://github.com/speakeasy-sdks/terraform-provider-ns-demo.git
   repoSubDirectory: .
   published: true
 features:
   terraform:
-    core: 3.7.0
+    core: 3.8.0
     globalSecurity: 2.81.2
     globalServerURLs: 2.82.1
 generatedFiles:
