@@ -1,6 +1,6 @@
 module github.com/API-Dev-NS/terraform-provider-Platform
 
-go 1.18
+go 1.20
 
 require (
 	github.com/cenkalti/backoff/v4 v4.2.0
