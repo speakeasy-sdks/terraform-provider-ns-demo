@@ -3,17 +3,17 @@ id: ea4c86f3-5502-49cd-9771-8cfc9d9d8ed2
 management:
   docChecksum: 2ce558252cc48bc50ccfd24efecd3cf4
   docVersion: 1.0.0
-  speakeasyVersion: internal
-  generationVersion: 2.250.2
-  releaseVersion: 0.9.0
-  configChecksum: c6a248522c9b9025164fea039ea5cddb
+  speakeasyVersion: 1.207.1
+  generationVersion: 2.280.6
+  releaseVersion: 0.10.0
+  configChecksum: 73dbada24c8a1b176c6bf01d8d603fa1
   repoURL: https://github.com/speakeasy-sdks/terraform-provider-ns-demo.git
   repoSubDirectory: .
   published: true
 features:
   terraform:
-    core: 3.9.4
-    globalSecurity: 2.81.3
+    core: 3.10.3
+    globalSecurity: 2.81.5
     globalServerURLs: 2.82.1
 generatedFiles:
   - internal/sdk/sdk.go
