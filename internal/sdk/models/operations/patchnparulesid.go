@@ -5,7 +5,7 @@ package operations
 import (
 	"encoding/json"
 	"fmt"
-	"github.com/API-Dev-NS/terraform-provider-Platform/internal/sdk/pkg/models/shared"
+	"github.com/API-Dev-NS/terraform-provider-Platform/internal/sdk/models/shared"
 	"net/http"
 )
 

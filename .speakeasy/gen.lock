@@ -3,20 +3,51 @@ id: ea4c86f3-5502-49cd-9771-8cfc9d9d8ed2
 management:
   docChecksum: 2ce558252cc48bc50ccfd24efecd3cf4
   docVersion: 1.0.0
-  speakeasyVersion: 1.207.1
-  generationVersion: 2.280.6
-  releaseVersion: 0.10.0
-  configChecksum: 73dbada24c8a1b176c6bf01d8d603fa1
+  speakeasyVersion: 1.215.1
+  generationVersion: 2.286.4
+  releaseVersion: 0.11.0
+  configChecksum: 23c52e5c3871ce1b7b4d28f14a1d8dd7
   repoURL: https://github.com/speakeasy-sdks/terraform-provider-ns-demo.git
   repoSubDirectory: .
   published: true
 features:
   terraform:
-    core: 3.10.3
-    globalSecurity: 2.81.5
+    core: 3.11.1
+    globalSecurity: 2.81.6
     globalServerURLs: 2.82.1
 generatedFiles:
-  - internal/sdk/sdk.go
+  - internal/sdk/platform.go
+  - internal/sdk/models/errors/sdkerror.go
+  - internal/sdk/types/bigint.go
+  - internal/sdk/types/date.go
+  - internal/sdk/types/datetime.go
+  - internal/sdk/types/decimal.go
+  - internal/sdk/types/pointers.go
+  - internal/sdk/internal/utils/contenttype.go
+  - internal/sdk/internal/utils/form.go
+  - internal/sdk/internal/utils/headers.go
+  - internal/sdk/internal/utils/json.go
+  - internal/sdk/internal/utils/pathparams.go
+  - internal/sdk/internal/utils/queryparams.go
+  - internal/sdk/internal/utils/requestbody.go
+  - internal/sdk/internal/utils/retries.go
+  - internal/sdk/internal/utils/security.go
+  - internal/sdk/internal/utils/utils.go
+  - internal/sdk/models/operations/deletenparulesid.go
+  - internal/sdk/models/operations/getnparules.go
+  - internal/sdk/models/operations/getnparulesid.go
+  - internal/sdk/models/operations/patchnparulesid.go
+  - internal/sdk/models/operations/postnparules.go
+  - internal/sdk/models/shared/npapolicyresponseitem.go
+  - internal/sdk/models/shared/npapolicyruledata.go
+  - internal/sdk/models/shared/npapolicyruledlp.go
+  - internal/sdk/models/shared/npapolicyresponse400.go
+  - internal/sdk/models/shared/npapolicyrequest.go
+  - internal/sdk/models/shared/security.go
+  - internal/sdk/.gitignore
+  - internal/sdk/.gitattributes
+  - internal/sdk/internal/hooks/registration.go
+  - internal/sdk/internal/hooks/hooks.go
   - examples/README.md
   - go.mod
   - go.sum
@@ -45,22 +76,6 @@ generatedFiles:
   - internal/provider/reflect/slice.go
   - internal/provider/reflect/struct.go
   - internal/provider/utils.go
-  - internal/sdk/pkg/models/sdkerrors/sdkerror.go
-  - internal/sdk/pkg/types/bigint.go
-  - internal/sdk/pkg/types/date.go
-  - internal/sdk/pkg/types/datetime.go
-  - internal/sdk/pkg/types/decimal.go
-  - internal/sdk/pkg/types/pointers.go
-  - internal/sdk/pkg/utils/contenttype.go
-  - internal/sdk/pkg/utils/form.go
-  - internal/sdk/pkg/utils/headers.go
-  - internal/sdk/pkg/utils/json.go
-  - internal/sdk/pkg/utils/pathparams.go
-  - internal/sdk/pkg/utils/queryparams.go
-  - internal/sdk/pkg/utils/requestbody.go
-  - internal/sdk/pkg/utils/retries.go
-  - internal/sdk/pkg/utils/security.go
-  - internal/sdk/pkg/utils/utils.go
   - internal/validators/DateValidator.go
   - internal/validators/ExactlyOneChild.go
   - internal/validators/JSONParseValidator.go
@@ -77,17 +92,6 @@ generatedFiles:
   - main.go
   - terraform-registry-manifest.json
   - tools/tools.go
-  - internal/sdk/pkg/models/operations/deletenparulesid.go
-  - internal/sdk/pkg/models/operations/getnparules.go
-  - internal/sdk/pkg/models/operations/getnparulesid.go
-  - internal/sdk/pkg/models/operations/patchnparulesid.go
-  - internal/sdk/pkg/models/operations/postnparules.go
-  - internal/sdk/pkg/models/shared/npapolicyresponseitem.go
-  - internal/sdk/pkg/models/shared/npapolicyruledata.go
-  - internal/sdk/pkg/models/shared/npapolicyruledlp.go
-  - internal/sdk/pkg/models/shared/npapolicyresponse400.go
-  - internal/sdk/pkg/models/shared/npapolicyrequest.go
-  - internal/sdk/pkg/models/shared/security.go
   - USAGE.md
   - internal/provider/provider.go
   - examples/provider/provider.tf
